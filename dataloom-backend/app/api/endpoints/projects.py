@@ -145,6 +145,7 @@ def get_project_details(
     """Fetch full project details including all rows and columns."""
     with project_read_lock(project.project_id):
         df = read_table_safe(project.file_path)
+        dtypes = get_project_column_metadata(db, project.project_id)
 
     total_rows = len(df)
     total_pages = (total_rows + pageSize - 1) // pageSize
