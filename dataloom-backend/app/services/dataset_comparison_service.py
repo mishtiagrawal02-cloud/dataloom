@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from contextlib import suppress
 from dataclasses import dataclass
 from typing import Any
 
@@ -28,9 +29,8 @@ def _equal(left: Any, right: Any) -> bool:
     """Compare scalar values without treating missing values as different."""
     left_missing = pd.isna(left)
     right_missing = pd.isna(right)
-    if isinstance(left_missing, bool) and isinstance(right_missing, bool):
-        if left_missing and right_missing:
-            return True
+    if isinstance(left_missing, bool) and isinstance(right_missing, bool) and left_missing and right_missing:
+        return True
     try:
         result = left == right
         if hasattr(result, "item"):
@@ -45,10 +45,8 @@ def _json_value(value: Any) -> Any:
     if pd.isna(value):
         return None
     if hasattr(value, "item"):
-        try:
+        with suppress(TypeError, ValueError):
             value = value.item()
-        except (TypeError, ValueError):
-            pass
     if hasattr(value, "isoformat"):
         return value.isoformat()
     return value
@@ -103,12 +101,8 @@ def compare_dataframes(
         if checkpoint_df[match_column].duplicated().any() or current_df[match_column].duplicated().any():
             raise ValueError(f"Match column '{match_column}' must contain unique values in both datasets")
         strategy = f"identifier:{match_column}"
-        checkpoint_positions = {
-            _row_key(value): index for index, value in checkpoint_df[match_column].items()
-        }
-        current_positions = {
-            _row_key(value): index for index, value in current_df[match_column].items()
-        }
+        checkpoint_positions = {_row_key(value): index for index, value in checkpoint_df[match_column].items()}
+        current_positions = {_row_key(value): index for index, value in current_df[match_column].items()}
         checkpoint_keys = list(checkpoint_positions)
         current_keys = list(current_positions)
         removed_keys = [key for key in checkpoint_keys if key not in current_positions]
@@ -134,7 +128,11 @@ def compare_dataframes(
                 }
             )
         pairs = [
-            (checkpoint_positions[key], current_positions[key], _json_value(current_df.loc[current_positions[key], match_column]))
+            (
+                checkpoint_positions[key],
+                current_positions[key],
+                _json_value(current_df.loc[current_positions[key], match_column]),
+            )
             for key in matched_keys
         ]
     else:

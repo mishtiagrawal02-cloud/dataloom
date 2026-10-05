@@ -90,20 +90,14 @@ def compare_checkpoint(
     )
 
     checkpoint_index = next(
-        (
-            index
-            for index, item in enumerate(checkpoints)
-            if item.id == checkpoint_id
-        ),
+        (index for index, item in enumerate(checkpoints) if item.id == checkpoint_id),
         None,
     )
 
     if checkpoint_index is None:
         raise HTTPException(status_code=404, detail="Checkpoint not found")
 
-    checkpoint_ids = {
-        item.id for item in checkpoints[: checkpoint_index + 1]
-    }
+    checkpoint_ids = {item.id for item in checkpoints[: checkpoint_index + 1]}
 
     logs = (
         db.query(models.ProjectChangeLog)

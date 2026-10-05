@@ -103,16 +103,13 @@ export const compareCheckpoint = async (
   pageSize = 50,
   matchColumn?: string,
 ): Promise<DatasetComparison> => {
-  const response = await client.get(
-    `/logs/checkpoints/${projectId}/${checkpointId}/compare`,
-    {
-      params: {
-        page,
-        page_size: pageSize,
-        ...(matchColumn ? { match_column: matchColumn } : {}),
-      },
+  const response = await client.get(`/logs/checkpoints/${projectId}/${checkpointId}/compare`, {
+    params: {
+      page,
+      page_size: pageSize,
+      ...(matchColumn ? { match_column: matchColumn } : {}),
     },
-  );
+  });
 
   return response.data;
 };

@@ -27,12 +27,9 @@ const CheckpointsPanel = ({
 }: CheckpointsPanelProps) => {
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [comparison, setComparison] = useState<DatasetComparison | null>(null);
-  const [comparisonCheckpointId, setComparisonCheckpointId] = useState<string | null>(
-    null,
-  );
+  const [comparisonCheckpointId, setComparisonCheckpointId] = useState<string | null>(null);
   const [compareLoading, setCompareLoading] = useState(false);
   const [compareError, setCompareError] = useState<string | null>(null);
-
 
   const { showToast } = useToast();
 
@@ -57,14 +54,8 @@ const CheckpointsPanel = ({
     setCompareError(null);
     setComparisonCheckpointId(checkpointId);
 
-
     try {
-      const result = await compareCheckpoint(
-        projectId,
-        checkpointId,
-        page,
-        PAGE_SIZE,
-      );
+      const result = await compareCheckpoint(projectId, checkpointId, page, PAGE_SIZE);
 
       setComparison(result);
     } catch (err) {
@@ -127,9 +118,7 @@ const CheckpointsPanel = ({
                   key={checkpoint.id}
                   className="border-b border-app-border hover:bg-surface-hover transition-colors duration-150"
                 >
-                  <td className="py-3 px-4 text-sm text-foreground">
-                    {checkpoint.message}
-                  </td>
+                  <td className="py-3 px-4 text-sm text-foreground">{checkpoint.message}</td>
 
                   <td className="py-3 px-4 text-sm text-muted-foreground">
                     {new Date(checkpoint.created_at).toLocaleString()}
@@ -137,17 +126,11 @@ const CheckpointsPanel = ({
 
                   <td className="py-3 px-4 text-center">
                     <div className="flex items-center justify-center gap-2">
-                      <Button
-                        size="sm"
-                        onClick={() => handleCompare(checkpoint.id)}
-                      >
+                      <Button size="sm" onClick={() => handleCompare(checkpoint.id)}>
                         Compare
                       </Button>
 
-                      <Button
-                        size="sm"
-                        onClick={() => onRevert(checkpoint.id)}
-                      >
+                      <Button size="sm" onClick={() => onRevert(checkpoint.id)}>
                         Revert
                       </Button>
 
@@ -165,10 +148,7 @@ const CheckpointsPanel = ({
             ) : (
               <tr>
                 <td colSpan={3}>
-                  <EmptyState
-                    variant="inline"
-                    title="No checkpoints available"
-                  />
+                  <EmptyState variant="inline" title="No checkpoints available" />
                 </td>
               </tr>
             )}
@@ -182,15 +162,11 @@ const CheckpointsPanel = ({
         title="Delete Checkpoint"
       >
         <p className="text-foreground text-sm mb-6">
-          Are you sure you want to delete this checkpoint? This action cannot
-          be undone.
+          Are you sure you want to delete this checkpoint? This action cannot be undone.
         </p>
 
         <div className="flex justify-end gap-2">
-          <Button
-            variant="secondary"
-            onClick={() => setConfirmDeleteId(null)}
-          >
+          <Button variant="secondary" onClick={() => setConfirmDeleteId(null)}>
             Cancel
           </Button>
 
@@ -224,9 +200,7 @@ const CheckpointsPanel = ({
             <div className="rounded-lg border border-app-border p-4">
               <div className="flex items-center justify-between gap-4 mb-4">
                 <div>
-                  <h3 className="text-sm font-semibold text-foreground">
-                    Comparison Summary
-                  </h3>
+                  <h3 className="text-sm font-semibold text-foreground">Comparison Summary</h3>
 
                   <p className="text-xs text-muted-foreground mt-1">
                     Matching strategy: {comparison.matching_strategy}
@@ -236,72 +210,56 @@ const CheckpointsPanel = ({
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <div className="rounded-md bg-surface-hover p-3">
-                  <p className="text-xs text-muted-foreground">
-                    Checkpoint Rows
-                  </p>
+                  <p className="text-xs text-muted-foreground">Checkpoint Rows</p>
                   <p className="text-lg font-semibold text-foreground">
                     {comparison.summary.checkpoint_rows}
                   </p>
                 </div>
 
                 <div className="rounded-md bg-surface-hover p-3">
-                  <p className="text-xs text-muted-foreground">
-                    Current Rows
-                  </p>
+                  <p className="text-xs text-muted-foreground">Current Rows</p>
                   <p className="text-lg font-semibold text-foreground">
                     {comparison.summary.current_rows}
                   </p>
                 </div>
 
                 <div className="rounded-md bg-surface-hover p-3">
-                  <p className="text-xs text-muted-foreground">
-                    Added Rows
-                  </p>
+                  <p className="text-xs text-muted-foreground">Added Rows</p>
                   <p className="text-lg font-semibold text-foreground">
                     {comparison.summary.added_rows}
                   </p>
                 </div>
 
                 <div className="rounded-md bg-surface-hover p-3">
-                  <p className="text-xs text-muted-foreground">
-                    Removed Rows
-                  </p>
+                  <p className="text-xs text-muted-foreground">Removed Rows</p>
                   <p className="text-lg font-semibold text-foreground">
                     {comparison.summary.removed_rows}
                   </p>
                 </div>
 
                 <div className="rounded-md bg-surface-hover p-3">
-                  <p className="text-xs text-muted-foreground">
-                    Changed Cells
-                  </p>
+                  <p className="text-xs text-muted-foreground">Changed Cells</p>
                   <p className="text-lg font-semibold text-foreground">
                     {comparison.summary.changed_cells}
                   </p>
                 </div>
 
                 <div className="rounded-md bg-surface-hover p-3">
-                  <p className="text-xs text-muted-foreground">
-                    Affected Rows
-                  </p>
+                  <p className="text-xs text-muted-foreground">Affected Rows</p>
                   <p className="text-lg font-semibold text-foreground">
                     {comparison.summary.affected_rows}
                   </p>
                 </div>
 
                 <div className="rounded-md bg-surface-hover p-3">
-                  <p className="text-xs text-muted-foreground">
-                    Affected Columns
-                  </p>
+                  <p className="text-xs text-muted-foreground">Affected Columns</p>
                   <p className="text-lg font-semibold text-foreground">
                     {comparison.summary.affected_columns}
                   </p>
                 </div>
 
                 <div className="rounded-md bg-surface-hover p-3">
-                  <p className="text-xs text-muted-foreground">
-                    Columns
-                  </p>
+                  <p className="text-xs text-muted-foreground">Columns</p>
                   <p className="text-lg font-semibold text-foreground">
                     {comparison.summary.current_columns}
                   </p>
@@ -311,14 +269,11 @@ const CheckpointsPanel = ({
 
             {comparison.matching_strategy === "positional" && (
               <div className="rounded-lg border border-app-border p-4">
-                <p className="text-sm font-medium text-foreground">
-                  Positional row matching
-                </p>
+                <p className="text-sm font-medium text-foreground">Positional row matching</p>
 
                 <p className="text-xs text-muted-foreground mt-1">
-                  Rows are matched by their position because no identifier
-                  column was selected. Reordered rows may therefore appear as
-                  changed cells.
+                  Rows are matched by their position because no identifier column was selected.
+                  Reordered rows may therefore appear as changed cells.
                 </p>
               </div>
             )}
@@ -327,87 +282,44 @@ const CheckpointsPanel = ({
               comparison.columns.removed.length > 0 ||
               comparison.columns.dtype_changed.length > 0) && (
               <div>
-                <h3 className="text-sm font-semibold text-foreground mb-3">
-                  Column Changes
-                </h3>
+                <h3 className="text-sm font-semibold text-foreground mb-3">Column Changes</h3>
 
                 <div className="overflow-x-auto border border-app-border rounded-lg">
                   <table className="min-w-full text-sm">
                     <thead className="bg-surface-hover">
                       <tr>
-                        <th className="py-2 px-3 text-left">
-                          Change
-                        </th>
-                        <th className="py-2 px-3 text-left">
-                          Column
-                        </th>
-                        <th className="py-2 px-3 text-left">
-                          Before
-                        </th>
-                        <th className="py-2 px-3 text-left">
-                          After
-                        </th>
+                        <th className="py-2 px-3 text-left">Change</th>
+                        <th className="py-2 px-3 text-left">Column</th>
+                        <th className="py-2 px-3 text-left">Before</th>
+                        <th className="py-2 px-3 text-left">After</th>
                       </tr>
                     </thead>
 
                     <tbody>
                       {comparison.columns.added.map((column) => (
-                        <tr
-                          key={`added-${column}`}
-                          className="border-t border-app-border"
-                        >
-                          <td className="py-2 px-3 text-foreground">
-                            Added
-                          </td>
-                          <td className="py-2 px-3 text-foreground">
-                            {column}
-                          </td>
-                          <td className="py-2 px-3 text-muted-foreground">
-                            —
-                          </td>
-                          <td className="py-2 px-3 text-foreground">
-                            —
-                          </td>
+                        <tr key={`added-${column}`} className="border-t border-app-border">
+                          <td className="py-2 px-3 text-foreground">Added</td>
+                          <td className="py-2 px-3 text-foreground">{column}</td>
+                          <td className="py-2 px-3 text-muted-foreground">—</td>
+                          <td className="py-2 px-3 text-foreground">—</td>
                         </tr>
                       ))}
 
                       {comparison.columns.removed.map((column) => (
-                        <tr
-                          key={`removed-${column}`}
-                          className="border-t border-app-border"
-                        >
-                          <td className="py-2 px-3 text-foreground">
-                            Removed
-                          </td>
-                          <td className="py-2 px-3 text-foreground">
-                            {column}
-                          </td>
-                          <td className="py-2 px-3 text-foreground">
-                            —
-                          </td>
-                          <td className="py-2 px-3 text-muted-foreground">
-                            —
-                          </td>
+                        <tr key={`removed-${column}`} className="border-t border-app-border">
+                          <td className="py-2 px-3 text-foreground">Removed</td>
+                          <td className="py-2 px-3 text-foreground">{column}</td>
+                          <td className="py-2 px-3 text-foreground">—</td>
+                          <td className="py-2 px-3 text-muted-foreground">—</td>
                         </tr>
                       ))}
 
                       {comparison.columns.dtype_changed.map((change) => (
-                        <tr
-                          key={`dtype-${change.name}`}
-                          className="border-t border-app-border"
-                        >
-                          <td className="py-2 px-3 text-foreground">
-                            Type changed
-                          </td>
-                          <td className="py-2 px-3 text-foreground">
-                            {change.name}
-                          </td>
-                          <td className="py-2 px-3 text-foreground">
-                            {change.before}
-                          </td>
-                          <td className="py-2 px-3 text-foreground">
-                            {change.after}
-                          </td>
+                        <tr key={`dtype-${change.name}`} className="border-t border-app-border">
+                          <td className="py-2 px-3 text-foreground">Type changed</td>
+                          <td className="py-2 px-3 text-foreground">{change.name}</td>
+                          <td className="py-2 px-3 text-foreground">{change.before}</td>
+                          <td className="py-2 px-3 text-foreground">{change.after}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -418,9 +330,7 @@ const CheckpointsPanel = ({
 
             {comparison.rows.length > 0 && (
               <div>
-                <h3 className="text-sm font-semibold text-foreground mb-3">
-                  Row Changes
-                </h3>
+                <h3 className="text-sm font-semibold text-foreground mb-3">Row Changes</h3>
 
                 <div className="overflow-x-auto border border-app-border rounded-lg">
                   <table className="min-w-full text-sm">
@@ -428,12 +338,8 @@ const CheckpointsPanel = ({
                       <tr>
                         <th className="py-2 px-3 text-left">Change</th>
                         <th className="py-2 px-3 text-left">Row</th>
-                        <th className="py-2 px-3 text-left">
-                          Checkpoint Index
-                        </th>
-                        <th className="py-2 px-3 text-left">
-                          Current Index
-                        </th>
+                        <th className="py-2 px-3 text-left">Checkpoint Index</th>
+                        <th className="py-2 px-3 text-left">Current Index</th>
                       </tr>
                     </thead>
 
@@ -443,12 +349,8 @@ const CheckpointsPanel = ({
                           key={`${row.type}-${row.checkpoint_index}-${row.current_index}-${index}`}
                           className="border-t border-app-border"
                         >
-                          <td className="py-2 px-3 text-foreground">
-                            {row.type}
-                          </td>
-                          <td className="py-2 px-3 text-foreground">
-                            {renderValue(row.row)}
-                          </td>
+                          <td className="py-2 px-3 text-foreground">{row.type}</td>
+                          <td className="py-2 px-3 text-foreground">{renderValue(row.row)}</td>
                           <td className="py-2 px-3 text-foreground">
                             {renderValue(row.checkpoint_index)}
                           </td>
@@ -465,9 +367,7 @@ const CheckpointsPanel = ({
 
             {comparison.cells.length > 0 ? (
               <div>
-                <h3 className="text-sm font-semibold text-foreground mb-3">
-                  Changed Cells
-                </h3>
+                <h3 className="text-sm font-semibold text-foreground mb-3">Changed Cells</h3>
 
                 <div className="overflow-x-auto border border-app-border rounded-lg">
                   <table className="min-w-full text-sm">
@@ -475,9 +375,7 @@ const CheckpointsPanel = ({
                       <tr>
                         <th className="py-2 px-3 text-left">Row</th>
                         <th className="py-2 px-3 text-left">Column</th>
-                        <th className="py-2 px-3 text-left">
-                          Checkpoint
-                        </th>
+                        <th className="py-2 px-3 text-left">Checkpoint</th>
                         <th className="py-2 px-3 text-left">Current</th>
                       </tr>
                     </thead>
@@ -488,12 +386,8 @@ const CheckpointsPanel = ({
                           key={`${renderValue(cell.row)}-${cell.column}-${index}`}
                           className="border-t border-app-border"
                         >
-                          <td className="py-2 px-3 text-foreground">
-                            {renderValue(cell.row)}
-                          </td>
-                          <td className="py-2 px-3 text-foreground">
-                            {cell.column}
-                          </td>
+                          <td className="py-2 px-3 text-foreground">{renderValue(cell.row)}</td>
+                          <td className="py-2 px-3 text-foreground">{cell.column}</td>
                           <td className="py-2 px-3 text-foreground">
                             {renderValue(cell.checkpoint_value)}
                           </td>
@@ -512,9 +406,7 @@ const CheckpointsPanel = ({
               comparison.columns.removed.length === 0 &&
               comparison.columns.dtype_changed.length === 0 && (
                 <div className="py-8 text-center">
-                  <p className="text-sm font-medium text-foreground">
-                    No differences found
-                  </p>
+                  <p className="text-sm font-medium text-foreground">No differences found</p>
                   <p className="text-xs text-muted-foreground mt-1">
                     The current dataset matches this checkpoint.
                   </p>
@@ -533,9 +425,7 @@ const CheckpointsPanel = ({
                     size="sm"
                     variant="secondary"
                     disabled={comparison.page <= 1 || compareLoading}
-                    onClick={() =>
-                      handleComparisonPageChange(comparison.page - 1)
-                    }
+                    onClick={() => handleComparisonPageChange(comparison.page - 1)}
                   >
                     Previous
                   </Button>
@@ -543,13 +433,8 @@ const CheckpointsPanel = ({
                   <Button
                     size="sm"
                     variant="secondary"
-                    disabled={
-                      comparison.page >= comparison.total_pages ||
-                      compareLoading
-                    }
-                    onClick={() =>
-                      handleComparisonPageChange(comparison.page + 1)
-                    }
+                    disabled={comparison.page >= comparison.total_pages || compareLoading}
+                    onClick={() => handleComparisonPageChange(comparison.page + 1)}
                   >
                     Next
                   </Button>
